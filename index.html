@@ -21,10 +21,10 @@
         }
     </script>
     <style>
-        body { background-color: #020617; color: #f1f5f9; margin: 0; padding: 15px; }
+        body { background-color: #020617; color: #f1f5f9; margin: 0; padding: 15px; overflow-x: hidden; }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; opacity: 0; transform: translateY(15px); }
-        .delay-100 { animation-delay: 100ms; } .delay-200 { animation-delay: 200ms; }
+        .delay-100 { animation-delay: 100ms; }
         .glow-card { transition: all 0.3s ease; border: 1px solid #1e293b; }
         .glow-card:hover { transform: translateY(-5px); box-shadow: 0 0 25px rgba(14, 165, 233, 0.2); border-color: #0ea5e9; }
         @keyframes statusPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
@@ -43,66 +43,50 @@
             </div>
             <div class="mt-4 md:mt-0 text-right bg-dark-900 p-4 rounded-xl border border-dark-700">
                 <div class="inline-flex items-center px-2 py-0.5 bg-neon-green/10 text-neon-green text-xs font-bold rounded">
-                    <span class="w-1.5 h-1.5 bg-neon-green rounded-full mr-1.5 animate-status-live"></span> LSTM 분석 엔진 작동중
+                    <span class="w-1.5 h-1.5 bg-neon-green rounded-full mr-1.5 animate-status-live"></span> ML 엔진 실시간 분석중
                 </div>
-                <p class="text-sm font-bold text-dark-300 mt-1">상태: <span class="text-white">LIVE MONITORING</span></p>
+                <p class="text-sm font-bold text-dark-300 mt-1">분석 유닛: <span class="text-white">100 Units</span></p>
             </div>
         </header>
 
+        <!-- 상단 요약 카드 섹션 -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- 평균 RUL -->
             <div class="glow-card bg-dark-900 p-5 rounded-2xl fade-in-up delay-100">
                 <h3 class="text-dark-400 font-bold text-xs uppercase mb-1">평균 예측 RUL</h3>
                 <div class="text-4xl font-black text-neon-blue tracking-tighter">{{avg_rul}}<span class="text-lg text-dark-400 ml-1"> cycles</span></div>
-                <p class="text-[11px] mt-2 font-bold text-neon-green">▲ 안정적 가동 상태</p>
             </div>
-            <!-- 건전도 -->
-            <div class="glow-card bg-dark-900 p-5 rounded-2xl fade-in-up delay-200">
+            <div class="glow-card bg-dark-900 p-5 rounded-2xl fade-in-up">
                 <h3 class="text-dark-400 font-bold text-xs uppercase mb-1">시스템 건전도</h3>
                 <div class="text-4xl font-black text-neon-green tracking-tighter">{{health_score}}<span class="text-lg text-dark-400 ml-1">%</span></div>
                 <div class="mt-3 w-full bg-dark-700 h-1.5 rounded-full overflow-hidden">
                     <div class="bg-neon-green h-full" style="width: {{health_score}}%"></div>
                 </div>
             </div>
-            <!-- 주의 -->
             <div class="glow-card bg-dark-900 p-5 rounded-2xl fade-in-up border-l-4 border-l-neon-amber">
                 <h3 class="text-dark-400 font-bold text-xs uppercase mb-1">주의 단계 설비</h3>
-                <div class="text-4xl font-black text-neon-amber tracking-tighter">{{caution_count}}<span class="text-lg text-dark-400 ml-1"> Units</span></div>
-                <p class="text-[11px] mt-2 text-dark-400 uppercase">RUL 50-100 Cycles</p>
+                <div class="text-4xl font-black text-neon-amber tracking-tighter">{{caution_count}}</div>
             </div>
-            <!-- 위험 -->
             <div class="glow-card bg-dark-900 p-5 rounded-2xl fade-in-up border-l-4 border-l-neon-red shadow-lg shadow-neon-red/10">
                 <h3 class="text-dark-400 font-bold text-xs uppercase mb-1">위험 단계 설비</h3>
-                <div class="text-4xl font-black text-neon-red tracking-tighter animate-pulse">{{danger_count}}<span class="text-lg text-dark-400 ml-1"> Units</span></div>
-                <p class="text-[11px] mt-2 text-neon-red font-bold uppercase">Emergency Check Req.</p>
+                <div class="text-4xl font-black text-neon-red tracking-tighter animate-pulse">{{danger_count}}</div>
             </div>
         </div>
 
+        <!-- 메인 콘텐츠 섹션 -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 알림 스트림 섹션 -->
             <div class="lg:col-span-2 bg-dark-900 p-6 rounded-2xl border border-dark-700">
                 <h2 class="text-xl font-extrabold text-white mb-6 flex items-center">
-                    <span class="mr-3 text-neon-blue">📡</span> 센서 이상 징후 스트림
+                    <span class="mr-3 text-neon-blue">📡</span> 머신러닝 이상 징후 실시간 감지
                 </h2>
-                <div class="space-y-3">
-                    <div class="p-4 bg-dark-800 rounded-xl border border-neon-amber/20">
-                        <div class="flex justify-between font-bold text-sm">
-                            <span class="text-neon-amber">Sensor 11 (정압기 온도 상승)</span>
-                            <span class="text-dark-400">Unit 81</span>
-                        </div>
-                        <p class="text-xs text-dark-300 mt-1">임계치 대비 12% 상승 관측됨. 예방 정비 권고.</p>
-                    </div>
-                    <div class="p-4 bg-dark-800 rounded-xl border border-dark-700">
-                        <div class="flex justify-between font-bold text-sm">
-                            <span class="text-neon-blue">Sensor 04 (LPC 출구 압력)</span>
-                            <span class="text-dark-400">전체 유닛</span>
-                        </div>
-                        <p class="text-xs text-dark-300 mt-1">시스템 전반 압력 분포 정상 범위 내 유지 중.</p>
-                    </div>
+                <div class="max-h-[500px] overflow-y-auto pr-2">
+                    {{alert_items}}
                 </div>
             </div>
 
+            <!-- 차트 섹션 -->
             <div class="bg-dark-900 p-6 rounded-2xl border border-dark-700 flex flex-col items-center">
-                <h2 class="text-lg font-black text-white mb-6 w-full text-left">전체 유닛 상태 분포</h2>
+                <h2 class="text-lg font-black text-white mb-6 w-full text-left">상태 분포도</h2>
                 <div class="w-full h-48 relative">
                     <canvas id="healthChart"></canvas>
                     <div class="absolute inset-0 flex flex-col items-center justify-center pt-2">
@@ -111,17 +95,14 @@
                     </div>
                 </div>
                 <div class="mt-8 w-full space-y-2">
-                    <div class="flex justify-between text-xs font-bold bg-dark-800 p-3 rounded-xl">
-                        <span class="text-neon-green">정상 (RUL > 100)</span>
-                        <span>{{normal_pct}}%</span>
+                    <div class="flex justify-between text-xs font-bold bg-dark-800 p-3 rounded-xl text-neon-green">
+                        <span>정상 (RUL > 100)</span> <span>{{normal_pct}}%</span>
                     </div>
-                    <div class="flex justify-between text-xs font-bold bg-dark-800 p-3 rounded-xl">
-                        <span class="text-neon-amber">주의 (50-100)</span>
-                        <span>{{caution_pct}}%</span>
+                    <div class="flex justify-between text-xs font-bold bg-dark-800 p-3 rounded-xl text-neon-amber">
+                        <span>주의 (50-100)</span> <span>{{caution_pct}}%</span>
                     </div>
-                    <div class="flex justify-between text-xs font-bold bg-dark-800 p-3 rounded-xl">
-                        <span class="text-neon-red">위험 (< 50)</span>
-                        <span>{{danger_pct}}%</span>
+                    <div class="flex justify-between text-xs font-bold bg-dark-800 p-3 rounded-xl text-neon-red">
+                        <span>위험 (< 50)</span> <span>{{danger_pct}}%</span>
                     </div>
                 </div>
             </div>
@@ -137,7 +118,6 @@
                 datasets: [{
                     data: [{{normal_pct}}, {{caution_pct}}, {{danger_pct}}],
                     backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
-                    hoverBackgroundColor: ['#34d399', '#fbbf24', '#f87171'],
                     borderWidth: 0,
                     cutout: '80%'
                 }]
