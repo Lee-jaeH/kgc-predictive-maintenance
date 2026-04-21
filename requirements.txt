@@ -4,3 +4,5 @@ numpy
 matplotlib
 seaborn
 koreanize-matplotlib
+tensorflow-cpu
+scikit-learn
