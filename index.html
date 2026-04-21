@@ -1,278 +1,169 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>제품 판매 및 리뷰 분석 리포트</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Pretendard', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#fdf2f2',
-                            100: '#fbe8e8',
-                            500: '#ef4444',
-                            600: '#dc2626',
-                            700: '#b91c1c',
-                            900: '#7f1d1d',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { background-color: #f8fafc; }
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
-        
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* 카드 호버 및 강조 효과 추가 */
-        .dashboard-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .dashboard-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            border-color: #fca5a5;
-        }
-        
-        /* 텍스트 그라데이션 효과 */
-        .highlight-text {
-            background: linear-gradient(135deg, #dc2626, #991b1b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        /* 부드러운 깜빡임 애니메이션 (강조용) */
-        .pulse-soft {
-            animation: pulseSoft 2.5s infinite;
-        }
-        @keyframes pulseSoft {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-    </style>
-</head>
-<body class="bg-slate-50 text-gray-800 p-4 md:p-8">
+ @keyframes fadeInUp {
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .status-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .status-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+</style>
 
-    <div class="max-w-6xl mx-auto space-y-6">
-        
-        <!-- 헤더 영역 -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-end pb-5 border-b-2 border-gray-200 fade-in-up">
-            <div>
-                <span class="inline-block px-4 py-1.5 bg-gradient-to-r from-brand-100 to-rose-100 text-brand-800 text-sm font-bold rounded-full mb-3 shadow-sm border border-brand-200">
-                    📊 주간 인사이트 리포트 | 2026년 3월 4주차
-                </span>
-                <h1 class="text-3xl md:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight">
-                    정관장 에브리타임 밸런스 <br class="md:hidden" /><span class="highlight-text font-black text-4xl md:text-5xl drop-shadow-sm">(리뉴얼)</span>
-                </h1>
-            </div>
-            <div class="mt-4 md:mt-0 text-right text-gray-500 text-sm bg-white p-3.5 rounded-xl shadow-sm border border-gray-100">
-                <span class="font-bold text-gray-700">데이터 기준일:</span> 2026. 03. 22 ~ 03. 28<br>
-                <span class="font-bold text-gray-700">분석 대상:</span> 온/오프라인 채널 및 리뷰 500건
-            </div>
-        </header>
 
-        <!-- KPI 지표 영역 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 fade-in-up delay-100">
-            <!-- 수도권 판매량 -->
-            <div class="dashboard-card bg-white p-6 rounded-2xl shadow-md border border-gray-100 relative overflow-hidden group">
-                <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-500 group-hover:bg-emerald-400 transition-colors"></div>
-                <div class="absolute -right-6 -top-6 w-28 h-28 bg-emerald-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
-                <h3 class="text-gray-500 font-bold text-sm mb-2 relative z-10">수도권 판매량 (전주 대비)</h3>
-                <div class="flex items-baseline space-x-2 relative z-10 my-2">
-                    <span class="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter drop-shadow-sm">+15<span class="text-3xl">%</span></span>
-                    <span class="text-emerald-700 font-extrabold flex items-center text-sm bg-emerald-100 px-2 py-1 rounded-md pulse-soft shadow-sm">
-                        <svg class="w-4 h-4 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
-                        상승
-                    </span>
-                </div>
-                <p class="mt-3 text-sm font-bold text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-100 inline-flex items-center relative z-10 w-full">
-                    <span class="text-xl mr-2">🏪</span> 편의점 채널 강세
-                </p>
-            </div>
+<div class="max-w-6xl mx-auto space-y-6">
+    
+    <!-- 헤더 영역 -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 border-b border-slate-300 fade-in-up">
+        <div>
+            <span class="inline-flex items-center px-3 py-1 bg-industry-900 text-white text-xs font-bold rounded-md mb-2">
+                <span class="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span> LIVE MONITORING
+            </span>
+            <h1 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                KGC 설비 예지보전 <span class="text-industry-600">인사이트</span>
+            </h1>
+            <p class="text-slate-500 font-medium mt-1">NASA CMAPSS FD001 데이터 기반 실시간 분석 리포트</p>
+        </div>
+        <div class="mt-4 md:mt-0 text-right bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-wider">Analysis Metadata</p>
+            <p class="text-sm font-bold text-slate-700">분석 대상: <span class="text-industry-600">100 Units</span></p>
+            <p class="text-sm font-bold text-slate-700">알고리즘: <span class="text-industry-600">LSTM RNN</span></p>
+        </div>
+    </header>
 
-            <!-- 지방 판매량 -->
-            <div class="dashboard-card bg-white p-6 rounded-2xl shadow-md border border-gray-100 relative overflow-hidden group">
-                <div class="absolute top-0 left-0 w-1.5 h-full bg-rose-500 group-hover:bg-rose-400 transition-colors"></div>
-                <div class="absolute -right-6 -top-6 w-28 h-28 bg-rose-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-500"></div>
-                <h3 class="text-gray-500 font-bold text-sm mb-2 relative z-10">지방 판매량 (전주 대비)</h3>
-                <div class="flex items-baseline space-x-2 relative z-10 my-2">
-                    <span class="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter drop-shadow-sm">-2<span class="text-3xl">%</span></span>
-                    <span class="text-rose-700 font-extrabold flex items-center text-sm bg-rose-100 px-2 py-1 rounded-md shadow-sm">
-                        <svg class="w-4 h-4 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                        하락
-                    </span>
-                </div>
-                <p class="mt-3 text-sm font-bold text-rose-800 bg-rose-50 p-2.5 rounded-xl border border-rose-100 inline-flex items-center relative z-10 w-full">
-                    <span class="text-xl mr-2">🛒</span> 대형마트 정체
-                </p>
+    <!-- KPI 지표 영역 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 fade-in-up delay-100">
+        <!-- 시스템 건전도 -->
+        <div class="status-card bg-white p-5 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden">
+            <h3 class="text-slate-400 font-bold text-xs mb-1">전체 설비 건전도</h3>
+            <div class="flex items-baseline space-x-1">
+                <span class="text-4xl font-black text-slate-900">94.2<span class="text-xl">%</span></span>
             </div>
-
-            <!-- 주요 구매 연령층 -->
-            <div class="dashboard-card bg-white p-6 rounded-2xl shadow-md border border-gray-100 lg:col-span-2 relative overflow-hidden group">
-                <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-500 group-hover:bg-brand-400 transition-colors"></div>
-                <div class="flex justify-between items-center h-full relative z-10">
-                    <div class="pr-4">
-                        <h3 class="text-gray-500 font-bold text-sm mb-2">핵심 타겟 고객층</h3>
-                        <div class="text-3xl md:text-4xl font-black text-gray-900 mb-3 tracking-tight">2030 사회초년생</div>
-                        <p class="text-gray-600 font-medium">전체 구매자의 <span class="text-2xl font-black text-white bg-brand-600 px-3 py-1 rounded-lg shadow-md mx-1">45%</span> 차지</p>
-                    </div>
-                    <div class="w-28 h-28 flex-shrink-0 relative">
-                        <div class="absolute inset-0 bg-brand-50 rounded-full scale-110 -z-10 group-hover:scale-125 transition-transform duration-500"></div>
-                        <canvas id="ageChart"></canvas>
-                    </div>
-                </div>
+            <div class="mt-3 w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div class="bg-success h-full" style="width: 94%"></div>
             </div>
+            <p class="text-[10px] mt-2 font-bold text-success uppercase">Stable Condition</p>
         </div>
 
-        <!-- 리뷰 및 특이사항 영역 -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in-up delay-200">
-            
-            <!-- 고객 리뷰 분석 -->
-            <div class="dashboard-card bg-white p-6 rounded-2xl shadow-md border border-gray-100 lg:col-span-2">
-                <h2 class="text-xl md:text-2xl font-extrabold text-gray-800 mb-5 flex items-center">
-                    <span class="bg-gray-100 p-2.5 rounded-xl mr-3 text-2xl shadow-sm border border-gray-200">💬</span>
-                    고객 리뷰 핵심 요약 <span class="ml-3 text-sm font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200">분석 대상: 500건</span>
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <!-- 긍정 리뷰 -->
-                    <div class="bg-gradient-to-b from-emerald-50 to-white border border-emerald-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex items-center text-emerald-800 font-extrabold text-lg mb-4">
-                            <div class="bg-emerald-100 p-1.5 rounded-lg mr-2">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"></path></svg>
-                            </div>
-                            긍정적 피드백
-                        </div>
-                        <ul class="space-y-4">
-                            <li class="flex items-start bg-white p-3.5 rounded-xl border border-emerald-50 shadow-sm">
-                                <span class="flex-shrink-0 w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center font-bold text-sm mr-3">✓</span>
-                                <span class="text-gray-800 font-bold text-sm leading-relaxed pt-0.5">"포장이 세련되어 선물용으로 좋다"</span>
-                            </li>
-                            <li class="flex items-start bg-white p-3.5 rounded-xl border border-emerald-50 shadow-sm">
-                                <span class="flex-shrink-0 w-6 h-6 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center font-bold text-sm mr-3">✓</span>
-                                <span class="text-gray-800 font-bold text-sm leading-relaxed pt-0.5">"기존보다 쓴맛이 덜해 먹기 편하다"</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- 부정 리뷰 -->
-                    <div class="bg-gradient-to-b from-rose-50 to-white border border-rose-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex items-center text-rose-800 font-extrabold text-lg mb-4">
-                            <div class="bg-rose-100 p-1.5 rounded-lg mr-2">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.666v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"></path></svg>
-                            </div>
-                            개선 필요 사항
-                        </div>
-                        <ul class="space-y-4">
-                            <li class="flex items-start bg-white p-3.5 rounded-xl border border-rose-50 shadow-sm">
-                                <span class="flex-shrink-0 w-6 h-6 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center font-bold text-sm mr-3">!</span>
-                                <span class="text-gray-800 font-bold text-sm leading-relaxed pt-0.5">"가격이 작년보다 오른 느낌이다"</span>
-                            </li>
-                            <li class="flex items-start bg-white p-3.5 rounded-xl border border-rose-50 shadow-sm">
-                                <span class="flex-shrink-0 w-6 h-6 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center font-bold text-sm mr-3">!</span>
-                                <span class="text-gray-800 font-bold text-sm leading-relaxed pt-0.5">"박스 개봉이 가끔 뻑뻑하다"</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+        <!-- 평균 잔존 수명 -->
+        <div class="status-card bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+            <h3 class="text-slate-400 font-bold text-xs mb-1">평균 예측 RUL</h3>
+            <div class="flex items-baseline space-x-1">
+                <span class="text-4xl font-black text-slate-900">128<span class="text-xl"> cycles</span></span>
             </div>
+            <p class="text-[10px] mt-3 font-bold text-slate-500">전주 대비 <span class="text-danger">▼ 4.2%</span></p>
+        </div>
 
-            <!-- 특이사항 (인사이트) -->
-            <div class="dashboard-card bg-gradient-to-br from-brand-900 to-gray-900 p-6 rounded-2xl shadow-xl text-white relative overflow-hidden group border border-gray-800">
-                <!-- 배경 빛 번짐(Glow) 효과 장식 -->
-                <div class="absolute -right-10 -top-10 w-48 h-48 bg-brand-500 opacity-30 blur-3xl rounded-full transform group-hover:scale-125 transition-transform duration-700"></div>
-                <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-rose-500 opacity-20 blur-3xl rounded-full"></div>
-                
-                <div class="flex justify-between items-start mb-4 relative z-10">
-                    <h2 class="text-xl font-extrabold flex items-center">
-                        <span class="text-3xl mr-2 drop-shadow-md">🔥</span> 라이프스타일 트렌드
-                    </h2>
-                    <span class="bg-brand-500/30 text-brand-100 border border-brand-500/50 px-2.5 py-1 rounded-md text-xs font-black pulse-soft">HOT</span>
-                </div>
-                
-                <p class="text-gray-300 text-sm mb-6 relative z-10 font-medium border-b border-gray-700/50 pb-4">최근 소셜 및 리뷰 내 동시 언급 키워드</p>
-                
-                <div class="space-y-5 relative z-10">
-                    <div>
-                        <div class="flex justify-between text-sm mb-2">
-                            <span class="font-bold flex items-center text-gray-100 text-base">⛰️ 등산 / 🎾 테니스</span>
-                            <span class="font-extrabold text-rose-300 bg-rose-950/60 px-2.5 py-0.5 rounded-md border border-rose-900/50">↑ 30% 급증</span>
-                        </div>
-                        <div class="w-full bg-gray-800/80 rounded-full h-3 border border-gray-700 shadow-inner overflow-hidden">
-                            <div class="bg-gradient-to-r from-brand-600 to-rose-400 h-3 rounded-full relative" style="width: 75%">
-                                <!-- 사선 패턴 오버레이 -->
-                                <div class="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem]"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-black/40 backdrop-blur-md p-4 rounded-xl mt-4 border border-gray-700/50 shadow-lg relative overflow-hidden">
-                        <div class="absolute top-0 left-0 w-1 h-full bg-brand-500"></div>
-                        <p class="text-sm leading-relaxed pl-3 text-gray-200">
-                            <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-brand-300 text-base mb-1.5 block drop-shadow-sm">💡 핵심 인사이트</span>
-                            야외 활동 및 아웃도어 스포츠(등산, 테니스 등)를 즐길 때 간편하게 섭취할 수 있는 휴대성이 <strong class="text-white bg-white/10 px-1 rounded">2030 세대에게 강점</strong>으로 작용하고 있습니다.
-                        </p>
-                    </div>
-                </div>
+        <!-- 주의/위험 유닛 -->
+        <div class="status-card bg-white p-5 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-l-warning">
+            <h3 class="text-slate-400 font-bold text-xs mb-1">점검 필요 유닛</h3>
+            <div class="flex items-baseline space-x-1">
+                <span class="text-4xl font-black text-warning">08<span class="text-xl"> Units</span></span>
             </div>
+            <p class="text-[10px] mt-3 font-bold text-warning uppercase">Maintenance Required</p>
+        </div>
 
+        <!-- 데이터 신뢰도 -->
+        <div class="status-card bg-industry-900 p-5 rounded-2xl shadow-lg text-white">
+            <h3 class="text-industry-300 font-bold text-xs mb-1">모델 예측 정확도(RMSE)</h3>
+            <div class="flex items-baseline space-x-1">
+                <span class="text-4xl font-black text-white">14.82</span>
+            </div>
+            <p class="text-[10px] mt-3 font-bold text-industry-400 uppercase">Optimized LSTM Model</p>
         </div>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // 연령대 파이 차트 (Chart.js)
-            const ctx = document.getElementById('ageChart').getContext('2d');
-            const ageChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['2030 (사회초년생)', '기타 연령층'],
-                    datasets: [{
-                        data: [45, 55],
-                        backgroundColor: [
-                            '#ef4444', // brand-500
-                            '#f1f5f9'  // gray-100
-                        ],
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '75%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ' ' + context.label + ': ' + context.raw + '%';
-                                }
-                            }
-                        }
-                    }
+    <!-- 상세 분석 영역 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 fade-in-up delay-200">
+        
+        <!-- 센서 이상 징후 분석 -->
+        <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-black text-slate-800 flex items-center">
+                    <span class="p-2 bg-slate-100 rounded-lg mr-3 text-lg">🔍</span>
+                    주요 센서 이상 징후 요약
+                </h2>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-industry-100 text-industry-600 rounded-full flex items-center justify-center font-bold mr-4">S11</div>
+                        <div>
+                            <p class="text-sm font-black text-slate-800">Sensor 11 (정압기 온도)</p>
+                            <p class="text-xs text-slate-500">임계치 대비 12% 상승 관측</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 bg-amber-100 text-amber-700 text-[10px] font-black rounded-md">CAUTION</span>
+                </div>
+
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-industry-100 text-industry-600 rounded-full flex items-center justify-center font-bold mr-4">S04</div>
+                        <div>
+                            <p class="text-sm font-black text-slate-800">Sensor 04 (LPC 출구 압력)</p>
+                            <p class="text-xs text-slate-500">진동 패턴 불규칙성 감지</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black rounded-md">STABLE</span>
+                </div>
+            </div>
+
+            <div class="mt-6 p-4 bg-industry-50 rounded-xl border border-industry-100">
+                <p class="text-xs leading-relaxed text-industry-900">
+                    <span class="font-black block mb-1 underline text-industry-700">💡 엔지니어 코멘트</span>
+                    LSTM 모델 분석 결과, 특정 유닛들에서 센서 11번의 온도가 급격히 상승하는 패턴이 포착되었습니다. 이는 보통 30사이클 이내의 고장으로 이어지는 전조 증상이므로 조기 점검을 권장합니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- 상태 분포 차트 -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center">
+            <h2 class="text-lg font-black text-slate-800 mb-6 w-full text-left">유닛 상태 분포</h2>
+            <div class="w-full h-48 relative">
+                <canvas id="healthChart"></canvas>
+            </div>
+            <div class="mt-6 w-full space-y-2">
+                <div class="flex justify-between text-xs font-bold border-b border-slate-100 pb-2">
+                    <span class="text-slate-500">정상 (RUL > 100)</span>
+                    <span class="text-success">65%</span>
+                </div>
+                <div class="flex justify-between text-xs font-bold border-b border-slate-100 pb-2">
+                    <span class="text-slate-500">주의 (RUL 50-100)</span>
+                    <span class="text-warning">27%</span>
+                </div>
+                <div class="flex justify-between text-xs font-bold border-b border-slate-100 pb-2">
+                    <span class="text-slate-500">위험 (RUL < 50)</span>
+                    <span class="text-danger">8%</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById('healthChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['정상', '주의', '위험'],
+                datasets: [{
+                    data: [65, 27, 8],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+                    borderWidth: 0,
+                    cutout: '70%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
                 }
-            });
+            }
         });
-    </script>
-</body>
-</html>
+    });
+</script>
