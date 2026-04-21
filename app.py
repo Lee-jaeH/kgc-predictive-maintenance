@@ -60,15 +60,27 @@ def main():
             html_content = f.read()
         components.html(html_content, height=600, scrolling=True)
     
-    st.title("🚀 KGC 설비 예지보전 실시간 모니터링")
+    st.title("🫚 KGC 설비 예지보전 실시간 모니터링")
     
-    # 데이터 로드 (URL 방식)
-    with st.spinner('인터넷에서 데이터를 불러오는 중...'):
-        train_df, test_df, rul_df = load_data()
-        
-    if train_df is None:
-        st.error("데이터를 불러오지 못했습니다. 인터넷 연결을 확인해주세요.")
-        return
+    # 학습용 데이터 정의
+train_data = {
+    '설비ID': ['Machine_A', 'Machine_B', 'Machine_C', 'Machine_D'],
+    '가동시간': [120, 250, 80, 310],
+    '온도': [65.5, 72.1, 58.9, 81.2],
+    '진동계수': [0.02, 0.05, 0.01, 0.08],
+    '상태': ['정상', '주의', '정상', '위험']
+}
+# 테스트용 데이터 정의
+test_data = {
+    '설비ID': ['Machine_E', 'Machine_F'],
+    '가동시간': [150, 45],
+    '온도': [68.2, 55.4],
+    '진동계수': [0.03, 0.01],
+    '상태': ['정상', '정상']
+}
+# DataFrame 생성
+train_df = pd.DataFrame(train_data)
+test_df = pd.DataFrame(test_data)
 
     train_df, test_df = preprocess_data(train_df, test_df)
 
